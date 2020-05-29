@@ -48,6 +48,7 @@ void vfs_mem_map(char * discname);
 bool check_vdisc(char * discname);
 bool check_unix_file_to_copy_from(char * filename);
 
+vdisc create_empty_vdisc(char * discname);
 vdisc enter_vdisc(char * discname);
 void leave_vdisc(vdisc d);
 

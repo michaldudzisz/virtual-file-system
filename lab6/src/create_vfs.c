@@ -11,7 +11,7 @@ int main(int argc, char * argv[]) {
 		printf("Disc name is too long. Should not be longer than %d.\n", MAX_NAME_LENGTH);
 		exit(1);
 	}
-
+	
 	if (!access(argv[1], F_OK)) {
 		printf("File named %s already exists. Would you like to overwrite it? [y/n]\n", argv[1]);
 		if (!ask_y_n())

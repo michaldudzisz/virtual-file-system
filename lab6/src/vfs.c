@@ -2,7 +2,7 @@
 
 // PROGRAMY:
 void create_vfs(char * filename, size_t size) {
-	vdisc disc = enter_vdisc(filename);
+	vdisc disc = create_empty_vdisc(filename);
 
 	// Wypelnianie superbloku:
 	struct super_block super_block;
@@ -172,7 +172,7 @@ void rename_vfs_file(char * discname, char * old_name, char * new_name) {
 		return;
 	}
 	struct inode inode = find_first_inode_of_file(disc, old_name);
-	if (inode.index = -1)
+	if (inode.index == -1)
 		return;
 
 	strcpy(inode.name, new_name);
@@ -184,7 +184,7 @@ void remove_vfs_file(char * discname, char * filename) {
 	vdisc disc = enter_vdisc(discname);
 
 	struct inode start_inode = find_first_inode_of_file(disc, filename);
-	if (start_inode.index = -1)
+	if (start_inode.index == -1)
 		return;
 	struct inode current_inode = start_inode;
 	for (int i = 0; i < start_inode.file_inodes_nr; ++i) {
@@ -348,10 +348,20 @@ bool is_name_present(vdisc disc, char * name) {
 	return false;
 }
 
+vdisc create_empty_vdisc(char * discname) {
+	vdisc d = fopen(discname, "w+");
+	if (!d) {
+		printf("Unable to create empty file %s.\n", discname);
+		exit(1);
+	}
+	return d;
+}
+
 vdisc enter_vdisc(char * discname) {
 	vdisc d = fopen(discname, "r+");
 	if (!d) {
-		return NULL;
+		printf("Unable to open file %s.\n", discname);
+		exit(1);
 	}
 	return d;
 }

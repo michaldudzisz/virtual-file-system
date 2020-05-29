@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -g -lm
 
-all: create_vfs ls_vfs cp_to_vfs cp_from_vfs remove_vfs_file
+all: create_vfs ls_vfs cp_to_vfs cp_from_vfs remove_vfs_file rename_vfs_file drop_vfs vfs.o
 
 drop_vfs: vfs.o drop_vfs.c
 	$(CC) drop_vfs.c vfs.o -o $@ $(CFLAGS)
