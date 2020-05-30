@@ -42,7 +42,7 @@ void cp_to_vfs(char * discname, char * filename);
 bool cp_from_vfs(char * discname, char * filename);
 void ls_vfs(char * discname, bool with_size);
 void rename_vfs_file(char * discname, char * old_name, char * new_name);
-void remove_vfs_file(char * discname, char * filename);
+bool remove_vfs_file(char * discname, char * filename);
 void vfs_mem_map(char * discname);
 
 bool check_vdisc(char * discname);

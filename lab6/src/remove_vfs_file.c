@@ -7,7 +7,7 @@ int main(int argc, char * argv[]) {
 		exit(0);
 	}
 
-	if (argc != 3) {
+	if (argc < 3) {
 		printf("Invalid call. For more informations type '%s --help'\n", argv[0]);
 		exit(1);
 	}
@@ -15,7 +15,10 @@ int main(int argc, char * argv[]) {
 	if (!check_vdisc(argv[1]))
 		exit(1);
 
-	remove_vfs_file(argv[1], argv[2]);
+	for (int i = 0; i < argc - 2; ++i) {
+		if (!remove_vfs_file(argv[1], argv[ i + 2]))
+			printf("File %s has not been removed.\n", argv[i + 2]);
+	}
 	
 	return 0;
 }

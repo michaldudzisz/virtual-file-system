@@ -66,7 +66,7 @@ void cp_to_vfs(char * discname, char * filename) {
 		printf("Filename %s is already in use in virtual file system.\n", filename);
 		printf("Would you like to overwrite this file? [y/n] ");
 		scanf("%c", &opt);
-		fflush(stdin);
+		while ((getchar()) != '\n');
 		if (opt == 'n')
 			return;
 		else if (opt != 'y') {
@@ -131,9 +131,9 @@ bool cp_from_vfs(char * discname, char * filename) {
 	if (access(filename, F_OK) == 0) {
 		char opt;
 		printf("The file %s already exists in your operating system.\n", filename);
-		printf("Would you like to override this file? [y/n] ");
+		printf("Would you like to overwrite this file? [y/n] ");
 		scanf("%c", &opt);
-		fflush(stdin);
+		while ((getchar()) != '\n');
 		if (opt == 'n')
 			return false;
 		else if (opt != 'y') {
@@ -182,12 +182,12 @@ void rename_vfs_file(char * discname, char * old_name, char * new_name) {
 	leave_vdisc(disc);
 }
 
-void remove_vfs_file(char * discname, char * filename) {
+bool remove_vfs_file(char * discname, char * filename) {
 	vdisc disc = enter_vdisc(discname);
 
 	struct inode start_inode = find_first_inode_of_file(disc, filename);
 	if (start_inode.index == -1)
-		return;
+		return false;
 
 	struct inode current_inode = start_inode;
 	for (int i = 0; i < start_inode.file_inodes_nr; ++i) {
@@ -197,6 +197,7 @@ void remove_vfs_file(char * discname, char * filename) {
 	}
 
 	leave_vdisc(disc);
+	return true;
 }
 
 void vfs_mem_map(char * discname) {
@@ -398,7 +399,7 @@ unsigned int count_possible_inodes(size_t fs_size) {
 bool ask_y_n() {
 	char opt = 0;
 	scanf("%c", &opt);
-	fflush(stdin);
+	while ((getchar()) != '\n');
 	if (opt == 'n')
 		return false;
 	else if (opt != 'y') {
