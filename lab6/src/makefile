@@ -43,7 +43,7 @@ install: $(objects) vfs.o
 	@ sudo mkdir -p /usr/local/src/vfs/help_files
 	@ echo "Copying files to /usr/local/src/vfs/"
 	@ sudo cp vfs.h vfs.c cp_from_vfs.c cp_to_vfs.c ls_vfs.c create_vfs.c rename_vfs_file.c \
-	remove_vfs_file.c drop_vfs.c makefile /usr/local/src/vfs/src
+	remove_vfs_file.c drop_vfs.c create_sized_file.c makefile /usr/local/src/vfs/src
 	@ sudo cp -r ../help_files /usr/local/src/vfs/
 	@ echo "Removing executables from `pwd`"
 	@ rm $(objects)
