@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 #define BLOCK_SIZE 2048
-#define MAX_NAME_LENGTH 128
+#define MAX_NAME_LENGTH 256
 
 #define VFS_KEY "is_virtual_file_system"
 #define VFS_KEY_LENGTH 23

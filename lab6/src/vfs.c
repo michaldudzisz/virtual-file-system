@@ -89,6 +89,9 @@ void cp_to_vfs(char * discname, char * filename) {
 	struct super_block super_block = get_super_block(disc);
 	int required_inodes_nr = ceil((double) file_size / (double) super_block.block_size);
 
+	if (required_inodes_nr == 0) // pusty plik dalej chce przeniesc
+		required_inodes_nr = 1;
+
 	struct inode current_inode, prev_inode;
 	FILE * unix_file = fopen(filename, "r");
 	long file_offset = 0;
@@ -166,7 +169,7 @@ bool cp_from_vfs(char * discname, char * filename) {
 void rename_vfs_file(char * discname, char * old_name, char * new_name) {
 	vdisc disc = enter_vdisc(discname);
 	if (sizeof(new_name) > MAX_NAME_LENGTH) {
-		printf("New name is too long. File name should be max 128 characters long.\n");
+		printf("New name is too long. File name should be max %d characters long.\n", MAX_NAME_LENGTH);
 		return;
 	}
 	if (is_name_present(disc, new_name)) {
@@ -179,6 +182,14 @@ void rename_vfs_file(char * discname, char * old_name, char * new_name) {
 
 	strcpy(inode.name, new_name);
 	save_inode(disc, inode);
+	int file_inodes_nr = inode.file_inodes_nr;
+
+	for (int i = 1; i < file_inodes_nr; ++i) {
+		inode = get_nth_inode(disc, inode.next_node);
+		strcpy(inode.name, new_name);
+		save_inode(disc, inode);
+	}
+
 	leave_vdisc(disc);
 }
 
@@ -189,12 +200,17 @@ bool remove_vfs_file(char * discname, char * filename) {
 	if (start_inode.index == -1)
 		return false;
 
+	int released_inodes_nr = start_inode.file_inodes_nr;
 	struct inode current_inode = start_inode;
-	for (int i = 0; i < start_inode.file_inodes_nr; ++i) {
+	for (int i = 0; i < released_inodes_nr; ++i) {
 		current_inode.flags = 0;
 		save_inode(disc, current_inode);
 		current_inode = get_nth_inode(disc, current_inode.next_node);
 	}
+
+	struct super_block super_block = get_super_block(disc);
+	super_block.inodes_nr -= released_inodes_nr;
+	save_super_block(disc, super_block);
 
 	leave_vdisc(disc);
 	return true;
