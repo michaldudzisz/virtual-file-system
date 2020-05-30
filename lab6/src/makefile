@@ -1,7 +1,9 @@
 CC = gcc
 CFLAGS = -g -lm
+objects = create_vfs ls_vfs cp_to_vfs cp_from_vfs remove_vfs_file rename_vfs_file drop_vfs
 
-all: create_vfs ls_vfs cp_to_vfs cp_from_vfs remove_vfs_file rename_vfs_file drop_vfs vfs.o
+
+all: $(objects) vfs.o
 
 drop_vfs: vfs.o drop_vfs.c
 	$(CC) drop_vfs.c vfs.o -o $@ $(CFLAGS)
@@ -33,14 +35,15 @@ vfs.o: vfs.h vfs.c
 clean:
 	@rm *.o
 
-install: create_vfs ls_vfs cp_to_vfs cp_from_vfs remove_vfs_file rename_vfs_file drop_vfs vfs.o
+install: $(objects) vfs.o
 	@ rm *.o
 	@ echo "Copying executables to /usr/local/bin/"
-	@ sudo cp create_vfs ls_vfs cp_to_vfs cp_from_vfs remove_vfs_file rename_vfs_file drop_vfs \
-	 /usr/local/bin/
+	@ sudo cp $(objects) /usr/local/bin/
 	@ sudo mkdir -p /usr/local/src/vfs
 	@ echo "Copying sources to /usr/local/src/"
 	@ sudo cp vfs.h vfs.c cp_from_vfs.c cp_to_vfs.c ls_vfs.c create_vfs.c rename_vfs_file.c \
 	remove_vfs_file.c drop_vfs.c makefile /usr/local/src/vfs
+	@ echo "Removing executables from `pwd`"
+	@ rm $(objects)
 	@ echo "Installation complete. You can remove vfs files from: "
-	@ pwd
+	@ cd .. && pwd 

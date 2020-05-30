@@ -64,3 +64,4 @@ struct super_block get_super_block(FILE * file);
 struct inode get_nth_inode(vdisc disc, unsigned int index);
 unsigned int count_possible_inodes(size_t fs_size);
 bool ask_y_n();
+void print_helpfile(char * filename);

@@ -5,6 +5,11 @@ int main(int argc, char * argv[]) {
 	bool l_files_opt = false;
 	int option;
 
+	if (argc == 2 && strcmp(argv[1], "--help") == 0) {
+		print_helpfile("ls_vfs_help.txt");
+		exit(0);
+	}
+
 	while ((option = getopt(argc, argv, ":il")) != -1) { 
 		switch (option) {
 			case 'i':
@@ -22,7 +27,7 @@ int main(int argc, char * argv[]) {
 	}
 
 	if (argc - optind != 1) {
-		printf("Invalid call. Program should be called as:\n%s <discname> -<options>\n", argv[0]);
+		printf("Invalid call. Type '%s --help' for more informations. \n", argv[0]);
 		exit(1);
 	}
 

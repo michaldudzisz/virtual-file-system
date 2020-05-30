@@ -403,3 +403,12 @@ bool ask_y_n() {
 		return true;;
 	}	
 }
+
+void print_helpfile(char * filename) {
+	char command[sizeof("more $(find .. -name ") + sizeof(filename) + sizeof(")")] = "";
+	strcat(command, "more $(find .. -name ");
+	strcat(command, filename);
+	strcat(command, ")");
+
+	system(command);
+}

@@ -1,0 +1,5 @@
+Usage: rename_vfs_file VFS_DISC OLD_FILENAME NEW_FILENAME
+
+Renames specified files inside a VFS_DISC (which is a filename of virtual file system).
+
+If program encounters an error, it displayes an appropriate log and end its work (for example if VFS_DISC does not exist, program cannot read/write in VFS_DISC file, or there is no file OLD_FILENAME inside VS_DISC).
