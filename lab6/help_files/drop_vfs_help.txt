@@ -1,0 +1,5 @@
+Usage: drop_vfs VFS_DISC
+
+Removes a file, that is a virtual file system. VFS_DISC argument should be the name of file of removed file system.
+
+If program encounters an error, it displayes an appropriate log and shuts down (if VFS_DISC file does not exist, there is a problem with VFS_DISC or program has no permission to remove the file).
