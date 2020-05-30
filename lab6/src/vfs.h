@@ -65,3 +65,4 @@ struct inode get_nth_inode(vdisc disc, unsigned int index);
 unsigned int count_possible_inodes(size_t fs_size);
 bool ask_y_n();
 void print_helpfile(char * filename);
+void create_sized_file(char * filename, size_t size_kB);

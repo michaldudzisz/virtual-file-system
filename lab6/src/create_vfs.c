@@ -21,7 +21,7 @@ int main(int argc, char * argv[]) {
 		printf("File named %s already exists. Would you like to overwrite it? [y/n]\n", argv[1]);
 		if (!ask_y_n())
 			exit(0);
-		if (!access(argv[1], W_OK)) {
+		if (access(argv[1], W_OK)) {
 			printf("No permission to write in file %s.\n", argv[1]);
 			exit(1);
 		}

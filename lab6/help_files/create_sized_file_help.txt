@@ -1,0 +1,3 @@
+Usage: create_sized_file NAME SIZE_KB
+
+Creates a file of content of '0'-s and specified by SIZE_KB (in kB) size.

@@ -82,7 +82,7 @@ void cp_to_vfs(char * discname, char * filename) {
 	size_t file_size = file_stat.st_size;
 
 	if (free_space_in_vfs(disc) < file_size) {
-		printf("Not enough free space in virtual file system to carry such a file.\n");
+		printf("Not enough free space in virtual file system to carry file %s.\n", filename);
 		return;
 	}
 
@@ -108,8 +108,10 @@ void cp_to_vfs(char * discname, char * filename) {
 		file_offset = i * BLOCK_SIZE;
 		current_inode.used_bytes = copy_binary_block_to_vfs(unix_file, file_offset, disc, current_inode);
 
-		++super_block.used_inodes_nr;
+		super_block.used_inodes_nr += 1;
 		save_inode(disc, prev_inode);
+		save_inode(disc, current_inode);
+		save_super_block(disc, super_block);
 	}
 	save_inode(disc, current_inode);
 
@@ -186,11 +188,12 @@ void remove_vfs_file(char * discname, char * filename) {
 	struct inode start_inode = find_first_inode_of_file(disc, filename);
 	if (start_inode.index == -1)
 		return;
+
 	struct inode current_inode = start_inode;
 	for (int i = 0; i < start_inode.file_inodes_nr; ++i) {
 		current_inode.flags = 0;
-		current_inode = get_nth_inode(disc, current_inode.next_node);
 		save_inode(disc, current_inode);
+		current_inode = get_nth_inode(disc, current_inode.next_node);
 	}
 
 	leave_vdisc(disc);
@@ -211,7 +214,9 @@ void vfs_mem_map(char * discname) {
 		if (inode.flags & IN_USE) printf("1");
 		else printf("0");
 
-		printf("\t%s\n", inode.name);
+		if (inode.flags & IN_USE)
+			printf("\t%s", inode.name);
+		printf("\n");
 	}
 
 	leave_vdisc(disc);
@@ -316,6 +321,7 @@ void save_super_block(vdisc disc, struct super_block sb) {
 struct inode find_next_free_inode_from_index(vdisc disc, int index) {
 	struct inode inode;
 	int inodes_nr = get_super_block(disc).inodes_nr;
+
 	if (index > inodes_nr) {
 		printf("Given index must not be greater than summary count of inodes.\n");
 		inode.index = -1;
@@ -411,4 +417,21 @@ void print_helpfile(char * filename) {
 	strcat(command, ")");
 
 	system(command);
+}
+
+void create_sized_file(char * filename, size_t size_kB) {
+	FILE * file = fopen(filename, "w");
+	if (!file) {
+		printf("Error occured while opening file %s.\n", filename);
+		return;
+	}
+
+	unsigned char mem_block[1024];
+	memset(mem_block, 'a', sizeof(mem_block));
+	
+	for (int i = 0; i < size_kB; ++i) {
+		fwrite(mem_block, sizeof(mem_block), 1, file);
+	}
+
+	fclose(file);
 }
