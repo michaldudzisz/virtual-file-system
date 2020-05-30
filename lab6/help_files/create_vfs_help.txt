@@ -1,0 +1,5 @@
+Usage: create_vfs VFS_DISC SIZE
+
+Creates a file, that will be a virtual file system. VFS_DISC argument should be the name of file of new file system and SIZE is a size of it in kB.
+
+If program encounters an error, it displayes an appropriate log and, depending on the problem, may shut down (for example if VFS_DISC name is too long or program has no permission to write in file VFS_DISC) or ask for confirmation (for example to overwrite a VFS_DISC file).

@@ -1,0 +1,5 @@
+Usage: cp_to_vfs VFS_DISC FILE...
+
+Copy specified files into virtual file system VFS_DISC. Fisrt argument should be the name of VFS_DISC as a file in your operating system.
+
+If program encounters an error, it displayes an appropriate log and, depending on the problem, may shut down (for example if VFS_DOSC does not exist, or program cannot read/write in VFS_DISC file), ask for confirmation or skip copying one of files.

@@ -32,3 +32,15 @@ vfs.o: vfs.h vfs.c
 
 clean:
 	@rm *.o
+
+install: create_vfs ls_vfs cp_to_vfs cp_from_vfs remove_vfs_file rename_vfs_file drop_vfs vfs.o
+	@ rm *.o
+	@ echo "Copying executables to /usr/local/bin/"
+	@ sudo cp create_vfs ls_vfs cp_to_vfs cp_from_vfs remove_vfs_file rename_vfs_file drop_vfs \
+	 /usr/local/bin/
+	@ sudo mkdir -p /usr/local/src/vfs/src
+	@ echo "Copying sources to /usr/local/src/vfs/src"
+	@ sudo cp -r vfs.h vfs.c cp_from_vfs.c cp_to_vfs.c ls_vfs.c create_vfs.c rename_vfs_file.c \
+	remove_vfs_file.c drop_vfs.c makefile /usr/local/src/vfs/src
+	@ echo "Installation complete. You can remove vfs files from: "
+	@ pwd
