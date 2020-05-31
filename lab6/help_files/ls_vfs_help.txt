@@ -6,5 +6,3 @@ Available options:
 
 	-i 	do memory map printing informations about each inode
 	-l 	list files with their sizes
-
-Warning: option -i is stronger than -l and in case of passing both -i and -l program will be run as with -i option only.
