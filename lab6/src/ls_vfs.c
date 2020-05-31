@@ -36,32 +36,19 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 
-	if (inodes_opt) // do memory map
-		vfs_mem_map(argv[optind]);
-	else if (l_files_opt) // list files with their sizes
+	if (inodes_opt && l_files_opt) {
+		printf("File list:\n");
 		ls_vfs(argv[optind], true);
-	else // list files
+		printf("\nInode list:\n");
+		vfs_mem_map(argv[optind]);
+	} 
+	else if (inodes_opt) {
+		vfs_mem_map(argv[optind]);
+	}
+	else if (l_files_opt)
+		ls_vfs(argv[optind], true);
+	else
 		ls_vfs(argv[optind], false);
-		
-
-
-/*	int start_ind = optind;
-	for (optind; optind < argc; ++optind) {
-		if (optind == start_ind) {
-			if (!check_vdisc(argv[optind])) {
-				printf("Type '%s --help' for more informations.\n", argv[0]);
-				exit(1);
-			}
-		} else {
-			printf("Given file: %s\n", argv[optind]);
-		}
-
-	}*/
-	//char * discname = argv[1];
-
-/*	for (int i = 1; i < argc; ++i) {
-		cp_to_vfs(di);
-	}*/
 
 	return 0;
 }

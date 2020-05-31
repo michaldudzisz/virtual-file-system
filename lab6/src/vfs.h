@@ -50,7 +50,7 @@ bool check_unix_file_to_copy_from(char * filename);
 
 vdisc create_empty_vdisc(char * discname);
 vdisc enter_vdisc(char * discname);
-void leave_vdisc(vdisc d);
+bool leave_vdisc(vdisc d);
 
 struct inode find_first_inode_of_file(vdisc disc, char * filename);
 void save_super_block(vdisc disc, struct super_block sb);

@@ -209,7 +209,7 @@ bool remove_vfs_file(char * discname, char * filename) {
 	}
 
 	struct super_block super_block = get_super_block(disc);
-	super_block.inodes_nr -= released_inodes_nr;
+	super_block.used_inodes_nr -= released_inodes_nr;
 	save_super_block(disc, super_block);
 
 	leave_vdisc(disc);
@@ -306,7 +306,7 @@ size_t copy_binary_block_to_vfs(FILE * unix_file, long file_offset, vdisc disc, 
 	size_t read_bytes = fread((void *) bytes, 1, BLOCK_SIZE, unix_file);
 
 	fseek(disc, find_nth_memory_block_pos(disc, inode.index), SEEK_SET);
-	fwrite((void *) bytes, 1, read_bytes, disc);
+	fwrite((void *) bytes, read_bytes, 1, disc);
 
 	return read_bytes;
 }
@@ -389,8 +389,12 @@ vdisc enter_vdisc(char * discname) {
 	return d;
 }
 
-void leave_vdisc(vdisc d) {
-	fclose(d);
+bool leave_vdisc(vdisc d) {
+	if (fclose(d) != 0){
+		printf("Could not close disc!\n");
+		return false;
+	}
+	return true;
 }
 
 struct super_block get_super_block(vdisc disc) {
