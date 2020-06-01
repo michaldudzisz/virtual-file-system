@@ -1,10 +1,10 @@
 #! /usr/bin/sh
 # Skrypt dziala po wykonaniu make install w katalogu lab6/src
-# Inaczej należy dodać "./" przed każdy program
+# Inaczej należy dodać ścieżkę do każdego programu przed jego nazwę przy wywołaniu
 
 create_vfs dysk 75000 # dysk o rozmiarze 75 MB, czyli ok 33 000 i-wezlow
 
-create_sized_file plik_60_mb 65920 # 60 MB
+create_sized_file plik_60_mb 65920 # ok 66 MB
 
 create_sized_file plik_4_kb 4 # 4 kB
 touch pusty_plik1

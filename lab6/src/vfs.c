@@ -13,14 +13,14 @@ void create_vfs(char * filename, size_t size) {
 	super_block.inodes_nr = count_possible_inodes(size);
 	super_block.used_inodes_nr = 0;
 	// Zapis superbloku do wirtualnego dysku:
-	fwrite(&super_block, sizeof(super_block), 1, disc);
+	save_super_block(disc, super_block);
 
 	// Zapis i-wezlow na dysk:
 	struct inode inode;
 	inode.flags = 0;
 	for (int i = 0; i < super_block.inodes_nr; ++i) {
 		inode.index = i + 1;
-		fwrite(&inode, sizeof(inode), 1, disc);
+		save_inode(disc, inode);
 	}
 
 	// Stworzenie pozostalej przestrzeni dyskowej:
@@ -28,6 +28,10 @@ void create_vfs(char * filename, size_t size) {
 	memset(zeros, 0, sizeof(zeros));
 	for (int i = 0; i < super_block.inodes_nr; ++i)
 		fwrite(zeros, sizeof(zeros), 1, disc);
+
+	// Dopelnienie:
+	size_t left_bytes = (size - sizeof(struct super_block)) % (sizeof(struct inode) + BLOCK_SIZE);
+	fwrite(zeros, left_bytes, 1, disc);
 
 	leave_vdisc(disc);
 }
